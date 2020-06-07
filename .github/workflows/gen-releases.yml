@@ -17,14 +17,12 @@ jobs:
           username: parasrah
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          tags: "latest,${{ env.RELEASE_VERSION }},${{ env.GITHUB_SHA }}"
+          tags: "latest,${{ env.RELEASE_VERSION }},${{ github.sha }}"
 
   system:
+    runs-on: ubuntu-18.04
     needs: docker
-    container:
-      image: "docker.pkg.github.com/parasrah/buildroots:${{ env.GITHUB_SHA }}"
-      volumes:
-        - /home/br-user/app:/volume_mount
+    container: "docker.pkg.github.com/parasrah/buildroots:${{ github.sha }}"
     steps:
       - uses: actions/checkout@master
       - name: Get dependencies
