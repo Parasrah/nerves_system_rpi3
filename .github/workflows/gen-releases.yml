@@ -1,4 +1,4 @@
-name: 'Generate Image'
+name: 'Generate Releases'
 on:
   push:
     branches: [ master ]
@@ -17,6 +17,17 @@ jobs:
           username: parasrah
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          tags: "latest,${{ env.RELEASE_VERSION }}"
+          tags: "latest,${{ env.RELEASE_VERSION }},${{ env.GITHUB_SHA }}"
 
-
+  system:
+    needs: docker
+    container:
+      image: "docker.pkg.github.com/parasrah/buildroots:${{ env.GITHUB_SHA }}"
+      volumes:
+        - /home/br-user/app:/volume_mount
+    steps:
+      - uses: actions/checkout@master
+      - name: Get dependencies
+        run: mix deps.get
+      - name: Build system
+        run: mix compile
