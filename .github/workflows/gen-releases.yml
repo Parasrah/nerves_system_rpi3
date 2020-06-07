@@ -19,13 +19,14 @@ jobs:
           registry: docker.pkg.github.com
           tags: "latest,${{ env.RELEASE_VERSION }},${{ github.sha }}"
 
-  system:
-    runs-on: ubuntu-18.04
-    needs: docker
-    container: "docker.pkg.github.com/parasrah/buildroots:${{ github.sha }}"
-    steps:
-      - uses: actions/checkout@master
-      - name: Get dependencies
-        run: mix deps.get
-      - name: Build system
-        run: mix compile
+  # this is currently blocked as there is no way to download public images without authentication...
+  # system:
+  #   runs-on: ubuntu-18.04
+  #   needs: docker
+  #   container: "docker.pkg.github.com/parasrah/buildroots:${{ github.sha }}"
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - name: Get dependencies
+  #       run: mix deps.get
+  #     - name: Build system
+  #       run: mix compile
